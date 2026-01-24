@@ -52,9 +52,18 @@ void bfstrav(Node* root){
         if(temp->rightnode!=NULL) q.push(temp->rightnode);
     }
 }
+void leftboundry(Node* root){
+    if(root==NULL) return;
+    cout<<root->val;
+    if(root->leftnode==NULL) leftboundry(root->rightnode);
+    else leftboundry(root->leftnode);
+     if(root->leftnode==NULL && root->rightnode) leftboundry(root->rightnode);
+   
+}
 int main(){
-    int arr[]={1,2,3,4,5,6,INT_MIN,INT_MIN,INT_MIN,7,8,9};
+    int arr[]={1,2,3,4,5,6,7};
     int n=sizeof(arr)/sizeof(arr[0]);
     Node* root=consbt(arr,n);
     bfstrav(root);
+    leftboundry(root);
 }
