@@ -40,33 +40,41 @@ Node* consbt(int arr[], int n){
     return root;
 }
 
-void leftboundry(Node* root){
-  if(root==NULL) return;
-  if(root->leftnode==NULL && root->rightnode==NULL) return;
-  cout<<root->val<<" ";
-  leftboundry(root->leftnode);
-  if(root->leftnode==NULL) leftboundry(root->rightnode);
+void bfstrav(Node* root){
+    queue<Node*>q;
+    q.push(root);
+    while(q.size()>0){
+        Node* temp=q.front();
+        cout<<temp->val<<" ";
+        q.pop();
+
+        if(temp->leftnode!=NULL) q.push(temp->leftnode);
+        if(temp->rightnode!=NULL) q.push(temp->rightnode);
+    }
 }
-void bottomBoundry(Node* root){
-  if(root==NULL) return;
-  if(root->leftnode==NULL && root->rightnode==NULL) cout<<root->val<<" ";
-  bottomBoundry(root->leftnode);
-  bottomBoundry(root->rightnode);
+int level(Node* root){
+    if(root== NULL) return 0;
+    return 1+ max(level(root->leftnode),level(root->rightnode));
 }
-void rightBoundry(Node* root){
-  if(root==NULL) return;
-  if(root->leftnode==NULL && root->rightnode==NULL) return;
-  rightBoundry(root->rightnode);
-  if(root->rightnode==NULL)rightBoundry(root->leftnode);
-}
-void boundryprint(Node* root){
-    leftboundry(root);
-    bottomBoundry(root);
-    rightBoundry(root->rightnode);
+void leftside(Node* root, vector<int>&ans,int level){
+    if(root==NULL) return;
+    ans[level]=root->val;
+    leftside(root->rightnode,ans,level+1);
+    leftside(root->leftnode,ans,level+1);
+
 }
 int main(){
-    int arr[]={1,2,3,4,5,INT_MIN,6,7,INT_MIN,8,INT_MIN};
+    int arr[]={1,2,3,4,5,6,INT_MIN,INT_MIN,INT_MIN,7,8,9};
     int n=sizeof(arr)/sizeof(arr[0]);
     Node* root=consbt(arr,n);
-    boundryprint(root);
+    cout<<"Tree";
+    bfstrav(root);
+    cout<<"left side view of binary tree "<<endl;
+    vector<int>ans(level(root),0);
+    leftside(root,ans,0);
+
+  for(int x:ans){
+    cout<<x<<" ";
+  }
+    
 }
